@@ -2,9 +2,8 @@
 import { createDefaults, DefaultsSymbol } from '@/composables/defaults'
 import { createDisplay, DisplaySymbol } from '@/composables/display'
 import { createIcons, IconSymbol } from '@/composables/icons'
-import { createLocale, LocaleAdapterSymbol } from '@/composables/locale'
+import { createLocale, LocaleSymbol } from '@/composables/locale'
 import { createTheme, ThemeSymbol } from '@/composables/theme'
-import { RtlSymbol } from '@/composables/rtl'
 
 // Utilities
 import { defineComponent, getUid, IN_BROWSER, mergeDeep } from '@/util'
@@ -15,8 +14,7 @@ import type { App, ComponentPublicInstance, InjectionKey } from 'vue'
 import type { DefaultsOptions } from '@/composables/defaults'
 import type { DisplayOptions } from '@/composables/display'
 import type { IconOptions } from '@/composables/icons'
-import type { LocaleAdapter, LocaleOptions } from '@/composables/locale'
-import type { RtlOptions } from '@/composables/rtl'
+import type { LocaleOptions, RtlOptions } from '@/composables/locale'
 import type { ThemeOptions } from '@/composables/theme'
 
 export * from './composables'
@@ -30,7 +28,7 @@ export interface VuetifyOptions {
   display?: DisplayOptions
   theme?: ThemeOptions
   icons?: IconOptions
-  locale?: (LocaleOptions & RtlOptions) | (LocaleAdapter & RtlOptions)
+  locale?: LocaleOptions & RtlOptions
 }
 
 export interface Blueprint extends Omit<VuetifyOptions, 'blueprint'> {}
@@ -66,7 +64,7 @@ export const createVuetify = (vuetify: VuetifyOptions = {}) => {
       app.provide(DisplaySymbol, createDisplay(options.display, isHydrate))
       app.provide(ThemeSymbol, createTheme(app, options.theme))
       app.provide(IconSymbol, createIcons(options.icons))
-      app.provide(LocaleAdapterSymbol, createLocale(app, options.locale))
+      app.provide(LocaleSymbol, createLocale(options.locale))
     }
 
     if (!IN_BROWSER) {
@@ -102,8 +100,7 @@ export const createVuetify = (vuetify: VuetifyOptions = {}) => {
             display: inject.call(this, DisplaySymbol),
             theme: inject.call(this, ThemeSymbol),
             icons: inject.call(this, IconSymbol),
-            locale: inject.call(this, LocaleAdapterSymbol),
-            rtl: inject.call(this, RtlSymbol),
+            locale: inject.call(this, LocaleSymbol),
           })
         },
       },

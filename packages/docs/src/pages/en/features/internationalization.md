@@ -59,8 +59,8 @@ Using the `v-locale-provider` component it is possible to scope a portion of you
   <v-app>
     <v-select></v-select> <!-- Will use default locale -->
 
-    <v-locale-provider locale="jp">
-      <v-select></v-select> <!-- Will use jp locale -->
+    <v-locale-provider locale="ja">
+      <v-select></v-select> <!-- Will use ja locale -->
     </v-locale-provider>
   </v-app>
 </template>
@@ -178,7 +178,9 @@ const i18n = new createI18n({
 })
 
 const vuetify = createVuetify({
-  locale: createVueI18nAdapter({ i18n, useI18n })
+  locale: {
+    adapter: createVueI18nAdapter({ i18n, useI18n })
+  }
 })
 
 const app = createApp()
